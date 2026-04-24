@@ -4,6 +4,13 @@
 
 ---
 
+## Zugehörige Dokumente
+
+- **`economics.md`** — Arbeitsdokument zur Wirtschaftlichkeit (Kosten, Preise, Margen, Skalierung)
+- **`onboarding.md`** — Arbeitsdokument zum Onboarding-Prozess (Phasen, Design-Entscheidungen, offene Fragen)
+
+---
+
 ## 1. Executive Summary
 
 **Kaizen** ist ein AI Personal Coach, der echtes 1-on-1 Coaching im Sport-Lifestyle-Bereich für jedermann zugänglich macht. Zielpreis: ca. **30-40€ pro Monat** statt der üblichen 200-400€ für menschliches Online-Coaching.
@@ -140,7 +147,20 @@ Das Feedback echter Coaches fließt ausschließlich in die globale Regelbasis �
 
 ---
 
-## 8. Privatsphäre & Vertrauen
+## 8. Onboarding
+
+Der Onboarding-Prozess wurde in einer ersten Runde konzipiert. Die Kernentscheidungen im Überblick:
+
+- **Hybrid aus Dialog und Formular** — Milo führt zuerst ein natürliches Kennenlerngespräch, dann strukturierte App-Inputs für harte Fakten, dann gemeinsamer erster Plan
+- **Langes Onboarding über mehrere Wochen** — nicht als einmaliges Event, sondern als Prozess. Fördert Engagement und passt zum Wow-Effekt "Flexibilität"
+- **Direkte Ansprache bei Persönlichkeits-Kalibrierung** — Milo fragt offen, welcher Coaching-Stil passt, mit dem Vermerk dass alles anpassbar bleibt
+- **Anpassung des Onboardings an Erfahrungslevel** des Clients (Anfänger vs. Fortgeschrittener)
+
+**Für Details, Phasen-Beschreibung und offene Punkte siehe: `onboarding.md`**
+
+---
+
+## 9. Privatsphäre & Vertrauen
 
 - Beim Review durch echte Coaches werden Fälle **anonymisiert**
 - Begründung: Aus den Reviews entstehen nur **globale Verhaltensregeln** — Personenbezug ist nicht nötig
@@ -148,21 +168,23 @@ Das Feedback echter Coaches fließt ausschließlich in die globale Regelbasis �
 
 ---
 
-## 9. Geschäftsmodell (grobe Richtung)
+## 10. Geschäftsmodell (grobe Richtung)
 
 - **Kein Low-Budget-Produkt** — Qualität vor Preiskampf
 - **Zielpreis:** ca. 30-40€ / Monat für Full Coaching
 - Sollten für bessere Features mehr Ressourcen nötig sein → Preis-Thema neu bewerten
 - **Vergleich:** Etwa 10-20% des Preises eines menschlichen 1-on-1 Online-Coaches
 
-### 9.1 Skalierung des menschlichen Coach-Anteils
+### 10.1 Skalierung des menschlichen Coach-Anteils
 - Mit wachsender User-Basis skaliert der Human-in-the-Loop-Aufwand zunächst mit
 - **Gegenbewegung:** Je länger das System lebt, desto dichter wird die Regelbasis → desto seltener sind menschliche Eingriffe nötig
 - Dieses Verhältnis muss während der Skalierung **aktiv beobachtet** werden
 
+**Für detaillierte Kostenanalyse und Wirtschaftlichkeitsrechnung siehe: `economics.md`**
+
 ---
 
-## 10. Wow-Effekt für den User
+## 11. Wow-Effekt für den User
 
 Der zentrale "Das-ist-anders"-Moment liegt in der **Flexibilität**:
 - Keine starre App, die einen von Beginn an festgelegten Plan durchdrückt
@@ -172,7 +194,7 @@ Der zentrale "Das-ist-anders"-Moment liegt in der **Flexibilität**:
 
 ---
 
-## 11. Langfristige Vision
+## 12. Langfristige Vision
 
 ### Phase 1 — Nischen-Fokus
 Strength / Muscle / Fat-Loss als Startpunkt, um eine klare Nische zu besetzen und das System zu etablieren.
@@ -190,28 +212,29 @@ Strength / Muscle / Fat-Loss als Startpunkt, um eine klare Nische zu besetzen un
 
 ---
 
-## 12. Parkliste — Offene Punkte zur Vertiefung
+## 13. Parkliste — Offene Punkte zur Vertiefung
 
 Diese Themen wurden bewusst aus der ersten Visions-Runde ausgeklammert und müssen in späteren Iterationen geschärft werden:
 
 | # | Thema | Beschreibung |
 |---|-------|--------------|
-| 1 | **Onboarding-Prozess** | Wie lernt Milo den User initial kennen? Strukturiertes Onboarding vs. organisches Wachsen |
+| 1 | **Onboarding-Prozess** | Erste Runde erarbeitet → eigenes Dokument `onboarding.md`. Vertiefung läuft dort weiter. |
 | 2 | **Eingehende Kanäle** | Exakte Definition, welche Kommunikationskanäle unterstützt werden (App-Chat, WhatsApp, weitere Messenger, Sprachnachrichten, E-Mail?) |
 | 3 | **Grenzen des Coaches** | Wo hört Milo auf? Wann verweist er an Fachpersonen? (z.B. bei Schlaf-, Schmerz-, mentalen Themen, Essstörungen) |
 | 4 | **Datenerfassung im Detail** | Welche Daten werden genau erfasst? (Trainingslogs, Gewicht, Fotos, Schlaf, Ernährung, Wearables?) |
 | 5 | **Plan-Anpassungsregeln** | Genaue Regeln für Trigger, Frequenz und Umfang der Plan-Anpassung |
-| 6 | **Budget-Check** | Ob 30-40€/Monat realistisch sind, sobald Human-in-the-Loop-Aufwand klarer ist |
+| 6 | **Budget-Check** | Siehe `economics.md` — erste Runde erarbeitet, Vertiefung läuft dort weiter. |
 | 7 | **Regel-Review-Prozess** | Wer genehmigt neue globale Regeln? Einzelner Coach, Review-Board, automatische Qualitätschecks? |
 | 8 | **Persönlichkeits-Einstellung** | Welche Achsen gibt es? Wie granular kann der User einstellen? |
 | 9 | **Unsicherheits-Schwelle** | Empirische Kalibrierung, wann Milo einen echten Coach hinzuzieht |
 | 10 | **Namensfindung** | "Kaizen" und "Milo" sind Placeholder — finale Benennung nachholen |
+| 11 | **Pre-Onboarding** | Vor dem eigentlichen Onboarding: Landing Page, Probegespräch mit Milo vor Kauf o.ä. — Idee für die Zukunft, aktuell nicht im Fokus |
 
 ---
 
-## 13. Nächste Schritte (Vorschlag)
+## 14. Nächste Schritte (Vorschlag)
 
-1. Parkliste priorisieren — welches Thema ist am kritischsten?
-2. Einzelne Punkte in Tiefe ausarbeiten (z.B. Onboarding, Grenzen, Datenerfassung)
+1. Parkliste weiter priorisieren — welches Thema nehmen wir als nächstes?
+2. Einzelne Punkte in Tiefe ausarbeiten (z.B. Grenzen, Datenerfassung, Persönlichkeits-Einstellung)
 3. Parallel: erste Skizze der Architektur (noch ohne Umsetzungstiefe)
 4. Definition MVP-Scope für eine erste technische Evaluation

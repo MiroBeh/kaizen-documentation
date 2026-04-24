@@ -8,6 +8,7 @@
 
 - **`economics.md`** — Arbeitsdokument zur Wirtschaftlichkeit (Kosten, Preise, Margen, Skalierung)
 - **`onboarding.md`** — Arbeitsdokument zum Onboarding-Prozess (Phasen, Design-Entscheidungen, offene Fragen)
+- **`prototype.md`** — Arbeitsdokument zum technischen Prototyp / MVP (Phasen, Technologie, konkrete Schritte)
 
 ---
 

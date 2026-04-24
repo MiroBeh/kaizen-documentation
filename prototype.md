@@ -1,0 +1,257 @@
+# Kaizen — Prototype / MVP
+
+> **Zweck dieses Dokuments:** Arbeitsdokument für den technischen Prototypen. Hier definieren wir den Weg vom Konzept zu einem funktionierenden MVP — zunächst als **Single-User-System** (nur der Projekt-Owner selbst als User), um die Vision erlebbar zu machen und mit Anderen teilen zu können.
+>
+> **Status:** Planung (noch keine Implementierung gestartet)
+> **Referenz-Dokumente:** `vision.md`, `onboarding.md`, `economics.md`
+
+---
+
+## 1. Zielsetzung des Prototyps
+
+### 1.1 Was der Prototyp leisten soll
+- **Die Vision erlebbar machen** — nicht nur auf Papier diskutieren, sondern selbst erfahren
+- **Coaching-Beziehung mit Milo im Alltag testen** — über Wochen, nicht nur Minuten
+- **Lernen, welche Features wirklich funktionieren** und welche Ideen aus der Vision sich anders anfühlen als gedacht
+- **Greifbare Grundlage zum Teilen** — Freunden, potenziellen Mitstreitern, Investoren zeigen können: "So fühlt sich das an"
+
+### 1.2 Was der Prototyp NICHT sein muss
+- Kein Multi-User-System
+- Keine Authentifizierung, Payments, Accounts
+- Keine polierte UI
+- Keine skalierbare Cloud-Infrastruktur
+- Kein Human-in-the-Loop-System
+- Keine produktionsreife Regel-Lern-Mechanik
+- Kein WhatsApp Business API
+
+### 1.3 Warum Single-User der richtige Start ist
+- **Dramatisch einfacher zu bauen** — viele Komplexitätsebenen fallen weg
+- **Schnellster Weg zum Erkenntnisgewinn** — in wenigen Wochen im Alltag einsetzbar
+- **Echte Nutzung schlägt Planung** — jede Minute Eigennutzung bringt mehr Einsichten als stundenlanges Brainstorming
+- **Gute Story für später** — "Ich lasse mich seit X Wochen von meinem eigenen AI-Coach trainieren" ist überzeugender als jedes Konzept-Dokument
+
+---
+
+## 2. Technologie-Entscheidungen
+
+### 2.1 Primäre Sprache: Go
+Die Entscheidung fiel auf Go, weil:
+- Flüssige Sprachbeherrschung (Senior-Level) = maximale Geschwindigkeit beim Bauen
+- Minimaler Overhead/Boilerplate für kleine Services
+- Deployment trivial (statisches Binary auf VPS)
+- Gute LLM-SDK-Unterstützung (`anthropic-sdk-go`)
+- Concurrency-Modell ideal für proaktive Checks in späteren Phasen
+
+### 2.2 Hinweis: Python als mögliche Ergänzung in Zukunft
+Python wird **bewusst nicht ausgeschlossen**. Es könnte später hinzugezogen werden, insbesondere für:
+- Intensive Arbeit mit Vector Stores, Embeddings und RAG-Pipelines (LangChain, LlamaIndex)
+- Data Science / Analyse von Nutzungsdaten
+- ML-spezifische Komponenten
+
+**Aktueller Stand:** Für den MVP nicht benötigt. Regelbasis und persönliche Historie passen komplett in den System-Prompt bzw. in einfache Dateien. Bei späterer Skalierung kann ein Python-Service für spezifische Aufgaben ergänzt werden — die Sprachen lassen sich über REST/gRPC problemlos kombinieren.
+
+### 2.3 Vorläufiger Stack
+| Komponente | Technologie | Begründung |
+|---|---|---|
+| Sprache | Go | s.o. |
+| LLM-Anbindung | Claude API via `anthropic-sdk-go` | Gute SDK, lange Kontextfenster, gutes Memory-Handling |
+| Frontend/Chat | Telegram-Bot (via `tucnak/telebot` oder `go-telegram/bot`) | Kostenlos, in Minuten aufgesetzt, auf Handy + Desktop, Messenger-Gefühl |
+| Persistenz | SQLite (via `mattn/go-sqlite3`) oder einfache JSON/YAML-Dateien | Simpel, kein Infra-Overhead, reicht für Single-User |
+| Scheduling (ab Phase 3) | Cron oder Go-interne Timer/Goroutines | Für proaktive Checks |
+| Deployment | Kleiner VPS (z.B. Hetzner, DigitalOcean, ~5€/Monat) oder lokal | Reicht komplett für Single-User |
+
+### 2.4 Offene Technologie-Entscheidungen
+- [ ] Vector Store — noch nicht nötig, aber irgendwann: Pinecone, Weaviate, Qdrant oder lokal?
+- [ ] Strukturierte Daten-Eingabe: Telegram-Bot-Commands, simple Web-Form, Google Sheet/Notion-Integration?
+- [ ] Wenn später Web-UI: Go-nativ (Templ, HTMX) oder separates Frontend?
+
+---
+
+## 3. Die 4 MVP-Phasen
+
+Der Prototyp wird in **4 inkrementellen Phasen** gebaut. Jede Phase ist für sich nutzbar und liefert direkten Erkenntnisgewinn — kein Big-Bang-Launch nötig.
+
+---
+
+### Phase 1 — "Milo im Chat" (1-2 Wochenenden)
+
+**Ziel:** Du kannst mit Milo chatten, er kennt dich, erinnert sich an Gespräche.
+
+**Was gebaut wird:**
+- Claude API Anbindung mit definiertem System-Prompt (Milos Persönlichkeit, Coaching-Philosophie, Coaching-Regeln für Strength/Muscle/Fat-Loss)
+- Telegram-Bot als Chat-Frontend
+- Persistente Konversations-Historie in SQLite oder JSON
+- `profile.md` mit persönlichen Daten (Ziele, Historie, Equipment, Verletzungen) — wird Milo als Kontext mitgegeben
+- Basis-Regelbasis als separate Markdown-Datei (startet klein, wächst manuell)
+
+**Was sofort getestet werden kann:**
+- Wie fühlt sich die Beziehung zu Milo an?
+- Wie gut erinnert er sich an vergangene Gespräche?
+- Welche Fragen stellt er gut, welche schlecht?
+- Welcher Kommunikationsstil funktioniert? Lang? Kurz? Emojis? Voice?
+- Wie gut funktioniert der System-Prompt? Wo bricht Milo aus der Rolle?
+
+**Definition of Done:**
+- Chat mit Milo über Telegram funktioniert
+- Milo hat Zugriff auf `profile.md` und Gesprächshistorie
+- Du kannst Milo an mindestens 3 Tagen in Folge nutzen, ohne dass etwas bricht
+
+---
+
+### Phase 2 — "Milo kennt deine Trainingsdaten" (2-3 Wochenenden)
+
+**Ziel:** Milo kann auf Trainings- und Gesundheitsdaten zugreifen und darauf Bezug nehmen.
+
+**Was gebaut wird:**
+- Einfaches Tracking-Interface — Optionen:
+  - Telegram-Bot-Commands (`/gewicht 82.5`, `/training`)
+  - Simple Web-Form mit Go-HTTP-Server
+  - Google Sheet / Notion-API-Integration
+- Milo kann Daten vor jeder Antwort lesen
+- Basis-Tracking-Felder:
+  - Gewicht (täglich)
+  - Training (Übung, Sätze, Wiederholungen, Gewicht)
+  - Optional: Schlaf, Stimmung, Energie
+
+**Was sofort getestet werden kann:**
+- Welche Daten sind wirklich nützlich für das Coaching?
+- Wo ist die Grenze zu "Tracking-Wahn"?
+- Nervt die Dateneingabe, oder ist sie okay?
+- Wie nutzt Milo die Daten im Gespräch? Erkennt er Zusammenhänge?
+
+**Prinzip:** Bewusst minimalistisch. Nicht 20 Datenpunkte tracken, nur die, die für die Kernvision wirklich gebraucht werden. Erweiterung jederzeit möglich.
+
+**Definition of Done:**
+- Datenerfassung über mindestens einen Kanal funktioniert reibungslos
+- Milo liest Daten automatisch und nimmt im Chat darauf Bezug
+- Mindestens 1 Woche echte Nutzung hinter sich
+
+---
+
+### Phase 3 — "Milo wird proaktiv" (1-2 Wochenenden)
+
+**Ziel:** Milo meldet sich von selbst — morgens, nach Training, bei Anomalien.
+
+**Was gebaut wird:**
+- Scheduled Jobs (Cron oder Go-Timer), die Milo triggern
+- Einfache Anomalie-Erkennung:
+  - "Letzte 3 Tage kein Training eingetragen"
+  - "Gewicht +X kg / -X kg in Y Tagen"
+  - "Trainingsleistung bricht ein"
+- Milo bekommt Trigger und entscheidet, ob und wie er reagiert
+- Optional: Feste morgendliche/abendliche Check-ins
+
+**Was sofort getestet werden kann:**
+- Wie viel Proaktivität ist angenehm, wann wird sie nervig?
+- Welche Trigger sind wirklich wertvoll, welche sind Lärm?
+- Wie gut ist Milos Dosierung und Timing?
+- Wie reagiere ich emotional auf unerwartete Nachrichten?
+
+**Definition of Done:**
+- Mindestens 3 verschiedene Trigger-Typen implementiert
+- Milo meldet sich proaktiv über mindestens 2 Wochen
+- Bewertung: funktioniert oder muss angepasst werden
+
+---
+
+### Phase 4 — "Milo passt Pläne an" (2-3 Wochenenden)
+
+**Ziel:** Milo erstellt und passt den Trainingsplan aktiv an.
+
+**Was gebaut wird:**
+- Plan-Struktur in einer Datei, die Milo lesen und schreiben kann (z.B. `training_plan.md` oder YAML)
+- Milo kann Plan-Vorschläge machen, User bestätigt, Plan wird aktualisiert
+- Template-Basis für initiale Plan-Erstellung (einfache Vorlagen für verschiedene Ziele)
+- Plan-Historie (alle Versionen werden erhalten für späteres Lernen)
+
+**Was sofort getestet werden kann:**
+- Funktioniert die versprochene Flexibilität wirklich?
+- Sind Milos Anpassungen sinnvoll oder willkürlich?
+- Vertraue ich seinen Entscheidungen?
+- Wie gut kann Milo das Warum hinter Anpassungen erklären?
+
+**Definition of Done:**
+- Milo hat mindestens einmal einen Plan erstellt und mindestens dreimal angepasst
+- User (Projekt-Owner) trainiert nachweislich nach Milos Plan
+- Die "Wow-Effekt Flexibilität" ist erlebbar — oder es ist klar, was fehlt
+
+---
+
+## 4. Nach den 4 Phasen — was dann?
+
+### 4.1 Evaluation
+Nach Abschluss aller Phasen (realistisch: 6-10 Wochenenden, gestreckt über 2-3 Monate je nach Zeit) gibt es eine Evaluations-Runde:
+- Was funktioniert in der Vision so wie gedacht?
+- Was muss anders?
+- Was fehlt völlig?
+- Welche Kern-Differenzierer tragen wirklich?
+
+### 4.2 Mögliche nächste Schritte
+- **Zweiter Test-User** (Freund / Familie) — testen, ob Milo auch mit anderen Charakteren funktioniert
+- **Multi-User-Architektur** beginnen — Auth, User-Trennung, saubere Datenhaltung
+- **Regel-Lern-Prototyp** — erstes Human-in-the-Loop-Experiment
+- **Pitch / Konzept-Sharing** — Vision mit echten Erfahrungen unterfüttert zeigen
+- **Entscheidung:** Hobby weiterführen, Co-Founder suchen, Investment anstreben
+
+---
+
+## 5. Aktuelle To-Do-Liste für Phase 1
+
+Konkrete nächste Schritte, um loszulegen:
+
+- [ ] Claude API Account einrichten, API Key besorgen
+- [ ] Telegram Bot über @BotFather erstellen, Token sichern
+- [ ] Go-Projekt aufsetzen (Module, Struktur)
+- [ ] SDK-Abhängigkeiten integrieren (`anthropic-sdk-go`, Telegram-Library)
+- [ ] System-Prompt für Milo entwerfen — Persönlichkeit, Coaching-Philosophie, Grundregeln
+- [ ] `profile.md` mit eigenen Daten erstellen (Ziele, Historie, Equipment, Verletzungen)
+- [ ] Erste Version Regelbasis als Markdown — minimale Start-Regeln für Strength/Muscle/Fat-Loss
+- [ ] Basis-Chat-Flow bauen (Nachricht rein → Context zusammenbauen → Claude API → Antwort raus → Historie speichern)
+- [ ] Konversations-Historie persistent speichern
+- [ ] Deployment-Setup (VPS oder lokal mit Tunnel)
+- [ ] Erster echter Test: 3 Tage in Folge mit Milo chatten
+
+---
+
+## 6. Risiken und offene Fragen
+
+### 6.1 Technische Risiken
+- **Kontextfenster-Management:** Wann wird die Historie zu lang? Wie summarized man alte Gespräche, ohne Kontext zu verlieren?
+- **Milo bleibt in seiner Rolle:** Wie robust ist der System-Prompt gegen Abschweifungen?
+- **Ton trifft nicht:** Milo könnte zu generisch oder zu aufdringlich wirken — braucht iteratives Tuning
+
+### 6.2 Konzeptionelle Risiken
+- **Vision fühlt sich anders an als gedacht:** Der ganze Sinn des MVP ist, das herauszufinden — positiv gemeint
+- **Proaktivität nervt:** Möglich, dass die "proaktive Milo"-Idee im Alltag anders wirkt als im Konzept
+- **Plan-Anpassungen wirken unsicher:** Trotz guter Kommunikation könnten häufige Änderungen irritieren
+
+### 6.3 Offene Fragen
+| # | Frage | Phase |
+|---|-------|-------|
+| 1 | Wie verwaltet Milo wachsende Konversations-Historie ohne Kontextlimits zu sprengen? | 1 |
+| 2 | Welches Dateiformat für Regelbasis — Markdown, YAML, JSON, Mischung? | 1 |
+| 3 | Welcher Weg der Dateneingabe fühlt sich im Alltag am besten an? | 2 |
+| 4 | Welches Trigger-System für proaktive Checks — Cron oder ereignisbasiert? | 3 |
+| 5 | Wie strukturiert sich ein Plan, damit Milo ihn gut lesen und verändern kann? | 4 |
+
+---
+
+## 7. Annahmen-Tracker
+
+| Annahme | Aktueller Wert | Status |
+|---------|----------------|--------|
+| Phase 1 schafft man in 1-2 Wochenenden | Schätzung | zu validieren |
+| Single-User-Setup reicht für alle Kernerkenntnisse | Schätzung | zu validieren |
+| Telegram ist das richtige Frontend für den MVP | Entscheidung | kann später angepasst werden |
+| Claude API ist das richtige LLM für den MVP | Entscheidung | kann später gewechselt werden |
+| SQLite / Dateien reichen für Persistenz | Entscheidung | kann später gewechselt werden |
+| Kein Vector Store im MVP nötig | Annahme | zu validieren, wahrscheinlich korrekt |
+
+---
+
+## 8. Nächste Schritte (für dieses Dokument)
+
+1. Entscheidung: Wann wird Phase 1 gestartet?
+2. Konkretes System-Prompt-Design für Milo ausarbeiten (eigenes Dokument?)
+3. Struktur der Regelbasis konzeptionell festlegen
+4. Nach Phase 1: Lessons Learned hier dokumentieren, Plan für Phase 2 verfeinern

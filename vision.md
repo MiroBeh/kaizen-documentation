@@ -10,6 +10,7 @@
 - **`onboarding.md`** — Arbeitsdokument zum Onboarding-Prozess (Phasen, Design-Entscheidungen, offene Fragen)
 - **`prototype.md`** — Arbeitsdokument zum technischen Prototyp / MVP (Phasen, Technologie, konkrete Schritte)
 - **`learning.md`** — Lernpfad für AI/LLM-Grundlagen (parallel zur Prototyp-Entwicklung)
+- **`global-rules.md`** — Globale Regelbasis (Format, Kategorien, Starter-Regeln, Token-Strategie)
 
 ---
 

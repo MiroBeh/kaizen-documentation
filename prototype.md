@@ -3,7 +3,7 @@
 > **Zweck dieses Dokuments:** Arbeitsdokument für den technischen Prototypen. Hier definieren wir den Weg vom Konzept zu einem funktionierenden MVP — zunächst als **Single-User-System** (nur der Projekt-Owner selbst als User), um die Vision erlebbar zu machen und mit Anderen teilen zu können.
 >
 > **Status:** Planung (noch keine Implementierung gestartet)
-> **Referenz-Dokumente:** `vision.md`, `onboarding.md`, `economics.md`
+> **Referenz-Dokumente:** `vision.md`, `onboarding.md`, `economics.md`, `rules.md`
 
 ---
 
@@ -78,11 +78,11 @@ Der Prototyp wird in **4 inkrementellen Phasen** gebaut. Jede Phase ist für sic
 **Ziel:** Du kannst mit Milo chatten, er kennt dich, erinnert sich an Gespräche.
 
 **Was gebaut wird:**
-- Claude API Anbindung mit definiertem System-Prompt (Milos Persönlichkeit, Coaching-Philosophie, Coaching-Regeln für Strength/Muscle/Fat-Loss)
+- Claude API Anbindung mit definiertem System-Prompt (Milos Persönlichkeit, Coaching-Philosophie)
 - Telegram-Bot als Chat-Frontend
 - Persistente Konversations-Historie in SQLite oder JSON
 - `profile.md` mit persönlichen Daten (Ziele, Historie, Equipment, Verletzungen) — wird Milo als Kontext mitgegeben
-- Basis-Regelbasis als separate Markdown-Datei (startet klein, wächst manuell)
+- **Globale Regelbasis als Kernkomponente** — siehe eigenes Dokument `global-rules.md`. Startet mit 20-30 kuratierten Beispielregeln über alle Kategorien hinweg. Wird Milo als Wissensbasis bereitgestellt — Mechanismus dazu siehe Abschnitt 4.
 
 **Was sofort getestet werden kann:**
 - Wie fühlt sich die Beziehung zu Milo an?
@@ -177,16 +177,71 @@ Der Prototyp wird in **4 inkrementellen Phasen** gebaut. Jede Phase ist für sic
 
 ---
 
-## 4. Nach den 4 Phasen — was dann?
+## 4. Globale Regelbasis (Kernkomponente)
 
-### 4.1 Evaluation
+Die globale Regelbasis ist **kein Nebenelement, sondern eines der Herzstücke** des Prototyps. Ohne sie wäre Milo nur "ein Chatbot mit Coaching-Persönlichkeit" — die Regelbasis ist das, was Milo von einem generischen LLM-Chat unterscheidet. Sie repräsentiert kondensiertes Coaching-Wissen.
+
+**Eigenes Dokument:** `global-rules.md`
+
+### 4.1 Ziel im MVP
+- **Starter-Set: 20-30 kuratierte Regeln** über alle Kategorien hinweg
+- Genug Substanz, um Milos Coaching-Qualität realistisch zu testen
+- Genug Spielraum, um durch Nutzung organisch zu wachsen
+
+### 4.2 Kategorien (Erstdefinition, später zu schärfen)
+- **Trainingsdiagnostik** — Plateau-Erkennung, Volumen-Anpassung, Übertraining-Symptome
+- **Ernährungsdiagnostik** — Heißhunger-Patterns, Stagnation, Wassergewicht-Schwankungen
+- **Recovery & Lifestyle** — Schlaf, Stress, Krankheit/Reise-Anpassungen
+- **Mentale & Beziehungs-Themen** — Rückschläge, Erwartungssteuerung, Motivationskrisen
+- **Sicherheit & Grenzen** — Wann an Arzt/Physio/Ernährungstherapeut/Psycholog:in verweisen, Red Flags
+
+> **Hinweis:** Kategorien-Schema ist erste Version. Genaue Definition, Granularität und Tagging-System müssen später iteriert werden.
+
+### 4.3 Token-Effizienz (kritisches Architektur-Thema)
+
+**Problem:** Wachsende Regelbasis → bei jedem API-Call wird ein riesiger Block Text mitgeschickt → Kosten explodieren, Latenz steigt, Kontextfenster wird verbraucht.
+
+**Lösungsansätze (zu evaluieren):**
+
+| Ansatz | Idee | Wann sinnvoll |
+|--------|------|---------------|
+| **Prompt Caching** | Statischen Block (System-Prompt + Regelbasis) cachen, nur dynamische Teile pro Call neu | Sofort umsetzbar, größter Effekt bei stabiler Regelbasis |
+| **Selective Loading** | Nur Regeln laden, deren Kategorie zur User-Nachricht passt (Klassifikation vorab) | Bei wachsender Regelbasis (>50 Regeln) |
+| **Vector-basierte Retrieval (RAG)** | Embeddings über Regeln, nur relevanteste laden | Bei großer Regelbasis (>200+ Regeln) |
+| **Hierarchisches Setup** | Kern-Regeln immer dabei + situative Spezialregeln nach Bedarf | Mittlere Phase |
+| **Summarization-Layer** | Kompakte Regel-Zusammenfassung als Default, Vollversion bei Bedarf | Wenn Regeln sehr ausführlich werden |
+
+**Strategie für den MVP:** Bei 20-30 Regeln passt alles ohne Probleme in den Kontext. Prompt Caching ab Tag 1 nutzen. Selective Loading + RAG werden Themen, sobald die Regelbasis wächst — nicht jetzt vorzeitig optimieren.
+
+### 4.4 Format einer Regel (vorläufig)
+Jede Regel hat:
+- **Trigger / Situation** — wann ist die Regel relevant?
+- **Vorgehen / Diagnostik** — was macht Milo damit?
+- **Begründung** — warum macht er das (Wissensgrundlage)?
+- Optional: Beispiele, Tags, verwandte Regeln
+
+Konkrete Format-Festlegung erfolgt in `global-rules.md`.
+
+### 4.5 Offene Punkte zur Regelbasis (Parkliste)
+- [ ] Kategorien-Schema final definieren (welche Kategorien, wie granular?)
+- [ ] Tagging-System für Regeln (für Selective Loading später)
+- [ ] Token-Strategie schärfen, sobald Regelbasis wächst
+- [ ] Format-Entscheidung treffen (Markdown vs. YAML vs. Mischform)
+- [ ] Versionierung der Regelbasis (Git? Eigene Versionsnummern?)
+- [ ] Qualitätssicherung des Starter-Sets (eigenes Wissen vs. Coach hinzuziehen)
+
+---
+
+## 5. Nach den 4 Phasen — was dann?
+
+### 5.1 Evaluation
 Nach Abschluss aller Phasen (realistisch: 6-10 Wochenenden, gestreckt über 2-3 Monate je nach Zeit) gibt es eine Evaluations-Runde:
 - Was funktioniert in der Vision so wie gedacht?
 - Was muss anders?
 - Was fehlt völlig?
 - Welche Kern-Differenzierer tragen wirklich?
 
-### 4.2 Mögliche nächste Schritte
+### 5.2 Mögliche nächste Schritte
 - **Zweiter Test-User** (Freund / Familie) — testen, ob Milo auch mit anderen Charakteren funktioniert
 - **Multi-User-Architektur** beginnen — Auth, User-Trennung, saubere Datenhaltung
 - **Regel-Lern-Prototyp** — erstes Human-in-the-Loop-Experiment
@@ -195,7 +250,7 @@ Nach Abschluss aller Phasen (realistisch: 6-10 Wochenenden, gestreckt über 2-3 
 
 ---
 
-## 5. Aktuelle To-Do-Liste für Phase 1
+## 6. Aktuelle To-Do-Liste für Phase 1
 
 Konkrete nächste Schritte, um loszulegen:
 
@@ -205,7 +260,8 @@ Konkrete nächste Schritte, um loszulegen:
 - [ ] SDK-Abhängigkeiten integrieren (`anthropic-sdk-go`, Telegram-Library)
 - [ ] System-Prompt für Milo entwerfen — Persönlichkeit, Coaching-Philosophie, Grundregeln
 - [ ] `profile.md` mit eigenen Daten erstellen (Ziele, Historie, Equipment, Verletzungen)
-- [ ] Erste Version Regelbasis als Markdown — minimale Start-Regeln für Strength/Muscle/Fat-Loss
+- [ ] **`global-rules.md` aufsetzen** — Format definieren, Kategorien festlegen, 20-30 Starter-Regeln entwerfen
+- [ ] **Regelbasis-Loading-Mechanismus implementieren** — Regeln in System-Prompt-Kontext integrieren, Prompt Caching aktivieren
 - [ ] Basis-Chat-Flow bauen (Nachricht rein → Context zusammenbauen → Claude API → Antwort raus → Historie speichern)
 - [ ] Konversations-Historie persistent speichern
 - [ ] Deployment-Setup (VPS oder lokal mit Tunnel)
@@ -213,30 +269,33 @@ Konkrete nächste Schritte, um loszulegen:
 
 ---
 
-## 6. Risiken und offene Fragen
+## 7. Risiken und offene Fragen
 
-### 6.1 Technische Risiken
+### 7.1 Technische Risiken
 - **Kontextfenster-Management:** Wann wird die Historie zu lang? Wie summarized man alte Gespräche, ohne Kontext zu verlieren?
 - **Milo bleibt in seiner Rolle:** Wie robust ist der System-Prompt gegen Abschweifungen?
 - **Ton trifft nicht:** Milo könnte zu generisch oder zu aufdringlich wirken — braucht iteratives Tuning
+- **Token-Kosten der Regelbasis:** Bei wachsender Regelbasis Kostenrisiko — Token-Strategie muss früh greifen
 
-### 6.2 Konzeptionelle Risiken
+### 7.2 Konzeptionelle Risiken
 - **Vision fühlt sich anders an als gedacht:** Der ganze Sinn des MVP ist, das herauszufinden — positiv gemeint
 - **Proaktivität nervt:** Möglich, dass die "proaktive Milo"-Idee im Alltag anders wirkt als im Konzept
 - **Plan-Anpassungen wirken unsicher:** Trotz guter Kommunikation könnten häufige Änderungen irritieren
+- **Regelbasis-Qualität:** Schlechte oder zu generische Regeln führen zu schlechtem Coaching — Qualität der Starter-Regeln ist entscheidend
 
-### 6.3 Offene Fragen
+### 7.3 Offene Fragen
 | # | Frage | Phase |
 |---|-------|-------|
 | 1 | Wie verwaltet Milo wachsende Konversations-Historie ohne Kontextlimits zu sprengen? | 1 |
 | 2 | Welches Dateiformat für Regelbasis — Markdown, YAML, JSON, Mischung? | 1 |
-| 3 | Welcher Weg der Dateneingabe fühlt sich im Alltag am besten an? | 2 |
-| 4 | Welches Trigger-System für proaktive Checks — Cron oder ereignisbasiert? | 3 |
-| 5 | Wie strukturiert sich ein Plan, damit Milo ihn gut lesen und verändern kann? | 4 |
+| 3 | Wie integrieren wir die Regelbasis token-effizient in den Kontext? | 1 |
+| 4 | Welcher Weg der Dateneingabe fühlt sich im Alltag am besten an? | 2 |
+| 5 | Welches Trigger-System für proaktive Checks — Cron oder ereignisbasiert? | 3 |
+| 6 | Wie strukturiert sich ein Plan, damit Milo ihn gut lesen und verändern kann? | 4 |
 
 ---
 
-## 7. Annahmen-Tracker
+## 8. Annahmen-Tracker
 
 | Annahme | Aktueller Wert | Status |
 |---------|----------------|--------|
@@ -246,12 +305,15 @@ Konkrete nächste Schritte, um loszulegen:
 | Claude API ist das richtige LLM für den MVP | Entscheidung | kann später gewechselt werden |
 | SQLite / Dateien reichen für Persistenz | Entscheidung | kann später gewechselt werden |
 | Kein Vector Store im MVP nötig | Annahme | zu validieren, wahrscheinlich korrekt |
+| 20-30 Regeln im Kontext sind tokenmäßig unkritisch | Annahme | zu validieren in Praxis |
+| Prompt Caching reduziert Kosten der Regelbasis ausreichend | Annahme | zu validieren |
 
 ---
 
-## 8. Nächste Schritte (für dieses Dokument)
+## 9. Nächste Schritte (für dieses Dokument)
 
 1. Entscheidung: Wann wird Phase 1 gestartet?
-2. Konkretes System-Prompt-Design für Milo ausarbeiten (eigenes Dokument?)
-3. Struktur der Regelbasis konzeptionell festlegen
-4. Nach Phase 1: Lessons Learned hier dokumentieren, Plan für Phase 2 verfeinern
+2. `global-rules.md` aufsetzen und mit Starter-Regeln befüllen
+3. Konkretes System-Prompt-Design für Milo ausarbeiten (eigenes Dokument?)
+4. Token-Strategie für Regelbasis konkretisieren (Prompt Caching als erstes)
+5. Nach Phase 1: Lessons Learned hier dokumentieren, Plan für Phase 2 verfeinern

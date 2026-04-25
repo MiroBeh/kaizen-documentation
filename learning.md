@@ -50,7 +50,7 @@ Wenige, hochwertige Ressourcen statt endloser Linklisten. Lieber zehn Dinge wirk
 - Fähigkeiten und Grenzen
 
 ### Ressourcen
-- **[Video]** Andrej Karpathy — *"Intro to Large Language Models"* (~1h, YouTube). **Pflicht.** Der beste Einstieg, der existiert. Karpathy ist ehemaliger OpenAI/Tesla, erklärt ohne Mystik.
+- **[Video]** Andrej Karpathy — *"Intro to Large Language Models"* (~1h, YouTube). **Pflicht.** Der beste Einstieg, der existiert. Karpathy ist ehemaliger OpenAI/Tesla, erklärt ohne Mystik. ✅ 
 - **[Video]** 3Blue1Brown — *"But what is a GPT?"* (Neural Networks Serie, Episode 5-7). Visuell exzellent, hilft beim Intuitionsaufbau.
 - **[Optional Deep-Dive]** Andrej Karpathy — *"Deep Dive into LLMs like ChatGPT"* (~3.5h). Nur wenn du nach dem ersten Video mehr willst.
 
@@ -58,7 +58,7 @@ Wenige, hochwertige Ressourcen statt endloser Linklisten. Lieber zehn Dinge wirk
 Danach verstehst du, warum Milos System-Prompt so wichtig ist, warum Kontext Geld kostet und warum Halluzinationen ein reales Risiko sind, das wir aktiv managen müssen.
 
 ### Checkliste
-- [ ] Karpathys Intro-Video gesehen
+- [x] Karpathys Intro-Video gesehen
 - [ ] 3Blue1Brown Transformer-Episoden gesehen
 - [ ] Ich kann in eigenen Worten erklären, was ein Token ist und warum es wichtig ist
 - [ ] Ich kann erklären, warum LLMs halluzinieren

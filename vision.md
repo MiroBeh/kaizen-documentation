@@ -11,6 +11,7 @@
 - **`prototype.md`** — Arbeitsdokument zum technischen Prototyp / MVP (Phasen, Technologie, konkrete Schritte)
 - **`learning.md`** — Lernpfad für AI/LLM-Grundlagen (parallel zur Prototyp-Entwicklung)
 - **`global-rules.md`** — Globale Regelbasis (Format, Kategorien, Starter-Regeln, Token-Strategie)
+- **`data-inputs.md`** — Datenerfassungs-Spezifikation (Profil, tägliches Tracking, Ernährung, Check-ins)
 
 ---
 
@@ -224,7 +225,7 @@ Diese Themen wurden bewusst aus der ersten Visions-Runde ausgeklammert und müss
 | 1 | **Onboarding-Prozess** | Erste Runde erarbeitet → eigenes Dokument `onboarding.md`. Vertiefung läuft dort weiter. |
 | 2 | **Eingehende Kanäle** | Exakte Definition, welche Kommunikationskanäle unterstützt werden (App-Chat, WhatsApp, weitere Messenger, Sprachnachrichten, E-Mail?) |
 | 3 | **Grenzen des Coaches** | Wo hört Milo auf? Wann verweist er an Fachpersonen? (z.B. bei Schlaf-, Schmerz-, mentalen Themen, Essstörungen) |
-| 4 | **Datenerfassung im Detail** | Welche Daten werden genau erfasst? (Trainingslogs, Gewicht, Fotos, Schlaf, Ernährung, Wearables?) |
+| 4 | **Datenerfassung im Detail** | ✅ Erste vollständige Spezifikation erarbeitet → `data-inputs.md`. Offene Punkte dort in Parkliste. |
 | 5 | **Plan-Anpassungsregeln** | Genaue Regeln für Trigger, Frequenz und Umfang der Plan-Anpassung |
 | 6 | **Budget-Check** | Siehe `economics.md` — erste Runde erarbeitet, Vertiefung läuft dort weiter. |
 | 7 | **Regel-Review-Prozess** | Wer genehmigt neue globale Regeln? Einzelner Coach, Review-Board, automatische Qualitätschecks? |

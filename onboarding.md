@@ -65,12 +65,17 @@ Milo fragt **direkt** nach dem gewünschten Coaching-Stil, mit dem Vermerk, dass
 Milo leitet bewusst über: *"Okay, um dir wirklich gut helfen zu können, brauche ich noch ein paar harte Fakten. Das geht am schnellsten über ein paar Felder in der App."*
 
 **Strukturierte Inputs (in der App, nicht im Chat):**
+
+Vollständige Spezifikation dieser Felder: **`data-inputs.md` — Tier 1 (Statisches Profil)**
+
+Kurzübersicht:
 - Alter, Gewicht, Größe, Geschlecht
-- Trainingserfahrung (Anfänger / Fortgeschritten / ...)
-- Verfügbares Equipment (Gym, Home, welche Geräte)
-- Verfügbare Zeit (Tage/Woche, Minuten/Session)
+- Primäres Ziel (Muskelaufbau / Kraft / Fettabbau / Recomp)
+- Erfahrungslevel (Anfänger / Fortgeschritten / Wiedereinsteiger)
+- Verfügbare Trainingstage/Woche + Session-Dauer
+- Equipment — **v1: Gym only**
 - Verletzungen / gesundheitliche Einschränkungen
-- Ggf. Ausgangsmessungen, Fotos (optional)
+- Ernährungseinschränkungen (Allergien, Vegetarisch etc.) — optional
 
 *Das fühlt sich okay an, weil Milo den Zweck erklärt hat und die Beziehung schon steht.*
 

@@ -108,10 +108,11 @@ Der Prototyp wird in **4 inkrementellen Phasen** gebaut. Jede Phase ist für sic
   - Simple Web-Form mit Go-HTTP-Server
   - Google Sheet / Notion-API-Integration
 - Milo kann Daten vor jeder Antwort lesen
-- Basis-Tracking-Felder:
-  - Gewicht (täglich)
-  - Training (Übung, Sätze, Wiederholungen, Gewicht)
-  - Optional: Schlaf, Stimmung, Energie
+- Tracking-Felder (vollständige Spezifikation in **`data-inputs.md`**):
+  - **Täglich** (Tier 2): Körpergewicht, Schlafstunden, Energie-Level (1–5)
+  - **Per Session** (Tier 3): Übung, Sätze, Reps, Gewicht, Session-Gefühl (1–5)
+  - **Tägliche Ernährungs-Adherence** (Tier 4): Plan eingehalten? → Wenn Nein: Was war anders + wie weit weg?
+  - **Wöchentlicher Check-in** (Tier 5): Gesamt-Sentiment, Trainings-Adherence, Ernährungs-Adherence, Plan-Feedback
 
 **Was sofort getestet werden kann:**
 - Welche Daten sind wirklich nützlich für das Coaching?

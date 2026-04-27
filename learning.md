@@ -97,7 +97,7 @@ Danach verstehst du, warum Milos System-Prompt so wichtig ist, warum Kontext Gel
 **Das ist direkt Phase 1 des Prototyps.** Diese Woche baust du nicht nur Wissen, sondern legst das Fundament von Milo.
 
 ### Checkliste
-- [ ] Anthropic Account eingerichtet, erster API-Call funktioniert
+- [x] Anthropic Account eingerichtet, erster API-Call funktioniert
 - [ ] Claude API Doku überflogen
 - [ ] `temperature` und andere Parameter ausprobiert
 - [ ] Token-Kosten für typische Anfrage berechnet
